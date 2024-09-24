@@ -1,0 +1,31 @@
+networks:
+  monitoring:
+    driver: bridge
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      SA_PASSWORD: "YourStrong!Passw0rd"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    networks:
+      - monitoring
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - monitoring
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: products:latest
+    ports:
+      - "5000:8080"
+    networks:
+      - monitoring
+    depends_on:
+      - db
+      - redis

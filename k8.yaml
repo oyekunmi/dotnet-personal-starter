@@ -1,0 +1,157 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  REDIS_HOST: "products-redis"
+  REDIS_PORT: "6379"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: products
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: products
+  template:
+    metadata:
+      labels:
+        app: products
+    spec:
+      containers:
+        - name: products
+          image: oyekunmi2/demo:products
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 8080
+          env:
+          - name: REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: redis-secret
+                key: redis-password
+          args: ["--requirepass", "$(REDIS_PASSWORD)"]
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: products
+spec:
+  type: NodePort
+  selector:
+    app: products
+  ports:
+  - port: 5000
+    targetPort: 8080
+    nodePort: 30001
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: products-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: products-redis
+  template:
+    metadata:
+      labels:
+        app: products-redis
+    spec:
+      containers:
+        - name: products-redis
+          image: redis
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: 6379
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: products-redis
+spec:
+  selector:
+    app: products-redis
+  ports:
+  - port: 6379
+    targetPort: 6379
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: products-db-pv
+spec:
+  capacity:
+    storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: standard
+  hostPath:
+    path: "/mnt/data"
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: products-db-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: standard
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: products-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: products-db
+  template:
+    metadata:
+      labels:
+        app: products-db
+    spec:
+      containers:
+      - name: products-db
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        ports:
+        - containerPort: 1433
+        env:
+        - name: ACCEPT_EULA
+          value: "Y"
+        - name: SA_PASSWORD
+          value: "YourStrong!Passw0rd"
+        products:
+        - name: products-db
+          mountPath: /var/opt/mssql
+      volumes:
+      - name: products-db
+        persistentVolumeClaim:
+          claimName: products-db-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: products-db
+spec:
+  selector:
+    app: products-db
+  ports:
+  - port: 1433
+    targetPort: 1433

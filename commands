@@ -1,0 +1,6 @@
+
+docker build --pull --rm -f "Dockerfile" -t joshhello:latest "." 
+kubectl apply -f deployment.yaml 
+docker build -t counter-image -f Dockerfile .
+
+http://localhost:5263/swagger/index.html
