@@ -1,0 +1,144 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-deployment
+  namespace: dotnet-personal-starter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: 6379
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service
+  namespace: dotnet-personal-starter
+spec:
+  selector:
+    app: redis
+  ports:
+  - port: 6379
+    targetPort: 6379
+  type: ClusterIP
+
+# Deployments and Services are two fundamental but distinct Kubernetes resources that serve different purposes in managing containerized applications. Let's break down their differences:
+
+# Deployment:
+
+# 1. Purpose: Manages the deployment and scaling of a set of Pods (containers).
+# 2. Functionality:
+#    - Defines the desired state for Pods (e.g., which container image to use, how many replicas).
+#    - Ensures the specified number of Pod replicas are running.
+#    - Handles updates and rollbacks of Pods.
+# 3. Key features:
+#    - Replica management
+#    - Rolling updates
+#    - Rollback capability
+#    - Scaling (manual or automatic)
+
+# Service:
+
+# 1. Purpose: Provides a stable network endpoint to access one or more Pods.
+# 2. Functionality:
+#    - Acts as an abstraction layer that defines a logical set of Pods.
+#    - Provides a consistent way to route traffic to these Pods.
+#    - Enables load balancing across multiple Pod instances.
+# 3. Key features:
+#    - Service discovery
+#    - Load balancing
+#    - Stable IP address and DNS name
+
+# To illustrate these differences, let's look at a simple example:
+
+
+
+# ```yaml
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: nginx-deployment
+# spec:
+#   replicas: 3
+#   selector:
+#     matchLabels:
+#       app: nginx
+#   template:
+#     metadata:
+#       labels:
+#         app: nginx
+#     spec:
+#       containers:
+#       - name: nginx
+#         image: nginx:1.14.2
+#         ports:
+#         - containerPort: 80
+
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: nginx-service
+# spec:
+#   selector:
+#     app: nginx
+#   ports:
+#     - protocol: TCP
+#       port: 80
+#       targetPort: 80
+#   type: ClusterIP
+
+# ```
+
+# In this example:
+
+# 1. The Deployment:
+#    - Creates 3 replicas of an nginx Pod.
+#    - Defines the Pod template (container image, ports).
+#    - Manages these Pods, ensuring 3 are always running.
+
+# 2. The Service:
+#    - Selects all Pods with the label `app: nginx`.
+#    - Exposes these Pods on port 80.
+#    - Provides a single stable endpoint to access any of these Pods.
+
+# Key differences:
+
+# 1. Scope:
+#    - Deployment manages Pods and their lifecycles.
+#    - Service manages network access to a set of Pods.
+
+# 2. Persistence:
+#    - Pods managed by a Deployment can be created, destroyed, or replaced.
+#    - A Service maintains a stable network identity regardless of Pod lifecycle.
+
+# 3. Scaling:
+#    - Deployments handle scaling of Pods.
+#    - Services automatically adapt to the scaled Pods, load balancing as needed.
+
+# 4. Updates:
+#    - Deployments manage updates to Pod specifications.
+#    - Services continue to route traffic during updates, enabling zero-downtime deployments.
+
+# 5. IP Addresses:
+#    - Pods get unique IP addresses that can change when Pods are recreated.
+#    - Services have a stable IP address that doesn't change, even if the underlying Pods do.
+
+# In practice, Deployments and Services are often used together:
+# - The Deployment ensures the desired number of Pods are running and handles updates.
+# - The Service provides a stable way for other parts of the application or external users to access these Pods.
+
+# This separation of concerns allows for more flexible and robust application architectures in Kubernetes.
