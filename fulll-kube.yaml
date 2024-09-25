@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: app-config
+  name: products-config
 data:
   REDIS_HOST: "products-redis"
   REDIS_PORT: "6379"

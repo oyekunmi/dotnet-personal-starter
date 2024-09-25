@@ -4,8 +4,8 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:57034",
-      "sslPort": 44396
+      "applicationUrl": "http://localhost:19091",
+      "sslPort": 44349
     }
   },
   "profiles": {
@@ -14,9 +14,11 @@
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "http://localhost:5263",
+      "applicationUrl": "http://localhost:5096",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "REDIS_HOST": "http://192.168.49.2",
+        "REDIS_PORT": "30015",
       }
     },
     "https": {
@@ -24,9 +26,11 @@
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:7258;http://localhost:5263",
+      "applicationUrl": "https://localhost:7241;http://localhost:5096",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "REDIS_HOST": "http://192.168.49.2",
+        "REDIS_PORT": "30015",
       }
     },
     "IIS Express": {

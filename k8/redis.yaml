@@ -32,7 +32,8 @@ spec:
   ports:
   - port: 6379
     targetPort: 6379
-  type: ClusterIP
+    nodePort: 30015
+  type: NodePort
 
 # Deployments and Services are two fundamental but distinct Kubernetes resources that serve different purposes in managing containerized applications. Let's break down their differences:
 

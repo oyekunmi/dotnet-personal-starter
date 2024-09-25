@@ -17,7 +17,18 @@ spec:
           image: oyekunmi2/dotnet-personal-starter:latest
           imagePullPolicy: Always
           ports:
-          - containerPort: 8080
+            - containerPort: 8080
+          env:
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: REDIS_HOST
+            - name: REDIS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: REDIS_PORT
 
 ---
 apiVersion: v1

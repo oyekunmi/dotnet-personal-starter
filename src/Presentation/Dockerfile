@@ -18,4 +18,4 @@ COPY --from=build /app/out .
 EXPOSE 8080
 
 # Set the entry point for the application
-ENTRYPOINT ["dotnet", "joshhello.dll"]
+ENTRYPOINT ["dotnet", "Presentation.dll"]
