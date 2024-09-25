@@ -6,3 +6,9 @@ metadata:
 data:
   REDIS_HOST: "redis-service"
   REDIS_PORT: "6379"
+  MSSQL_HOST: "mssql-service"
+  MSSQL_PORT: "1433"
+  MSSQL_USER: "sa"
+  MSSQL_PASSWORD: "YourStrong!Passw0rd"
+  MSSQL_DB: "Products"
+  MSSQL_CONNECTIONSTRING: "Server=mssql-service;Database=Products;User=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True;Trusted_Connection=False;"

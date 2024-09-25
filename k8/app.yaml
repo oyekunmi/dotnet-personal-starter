@@ -29,6 +29,11 @@ spec:
                 configMapKeyRef:
                   name: config-map
                   key: REDIS_PORT
+            - name: MSSQL_CONNECTIONSTRING
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: MSSQL_CONNECTIONSTRING
 
 ---
 apiVersion: v1

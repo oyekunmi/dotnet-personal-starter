@@ -29,3 +29,8 @@ services:
     depends_on:
       - db
       - redis
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - MSSQL_CONNECTIONSTRING=Server=db;Database=Products;User=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True;Trusted_Connection=False;
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379

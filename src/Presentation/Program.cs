@@ -1,3 +1,5 @@
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,6 +45,16 @@ app.MapGet("/weatherforecast", () =>
     db.Ping();
     Console.WriteLine("Connected to Redis");
 
+    
+    var connectionString = Environment.GetEnvironmentVariable("MSSQL_CONNECTIONSTRING");
+    var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+    optionsBuilder.UseSqlServer(connectionString);
+
+    using (var context = new ApplicationDbContext(optionsBuilder.Options))
+    {
+            context.Database.EnsureCreated();
+            Console.WriteLine("Connected to SQL Server");
+    }
 
     return forecast;
 })
@@ -54,4 +66,13 @@ app.Run();
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+}
+
+
+public class ApplicationDbContext: DbContext
+{
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options)
+    {
+    }
 }
