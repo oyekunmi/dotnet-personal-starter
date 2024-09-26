@@ -19,18 +19,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "REDIS_HOST": "http://192.168.49.2",
         "REDIS_PORT": "30015",
-      }
-    },
-    "https": {
-      "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:7241;http://localhost:5096",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "REDIS_HOST": "http://192.168.49.2",
-        "REDIS_PORT": "30015",
+        "MSSQL_CONNECTIONSTRING": "Server=127.0.0.1,1433;Database=Products;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True;Trusted_Connection=False;"
       }
     },
     "IIS Express": {
