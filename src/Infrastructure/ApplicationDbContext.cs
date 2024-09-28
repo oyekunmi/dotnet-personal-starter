@@ -5,10 +5,11 @@ namespace Infrastructure;
 
 public class ApplicationDbContext: DbContext
 {
-    public DbSet<ProductItem> Products { get; set; } = null!;
-
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
     }
+
+    public DbSet<ProductItem> ProductItems { get; set; } = null!;
+
 }
